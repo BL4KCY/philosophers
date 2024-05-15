@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 16:33:05 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/15 18:36:05 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/15 20:23:53 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ int	init_data(t_data *data, int ac, char **av)
 	if (ac == 6)
 		data->nb_must_eat = atoi(av[5]);
 	data->philo_must_eat = 0;
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
-	if (!data->forks)
-		return (printf("Error: malloc failed\n"), 1);
+	if (!check_args(data))
+		return (1);
 	pthread_mutex_init(&data->print, NULL);
 	pthread_mutex_init(&data->death, NULL);
 	for (int i = 0; i < data->nb_philo; i++)
@@ -36,12 +35,9 @@ int	init_data(t_data *data, int ac, char **av)
 
 int	init_philo(t_data *data)
 {
-	t_philo	*philo;
+	t_philo	philo[200];
 	int		i;
 
-	philo = malloc(sizeof(t_philo) * data->nb_philo);
-	if (!philo)
-		return (printf("Error: malloc failed\n"), 1);
 	i = -1;
 	while (++i < data->nb_philo)
 	{
@@ -59,4 +55,19 @@ int	init_philo(t_data *data)
 	if (pthread_join(data->death_thread, NULL))
 		return (write(2, "Error: pthread_join failed\n", 27), 1);
 	return (0);
+}
+
+bool	check_args(t_data *data)
+{
+	if (data->nb_philo < 1 || data->nb_philo > 200)
+		return (false);
+	if (data->time_to_die < 60)
+		return (false);
+	if (data->time_to_eat < 60)
+		return (false);
+	if (data->time_to_sleep < 60)
+		return (false);
+	if (data->nb_must_eat != -1 && data->nb_must_eat < 1)
+		return (false);
+	return (true);
 }
