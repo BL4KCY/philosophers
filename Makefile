@@ -20,7 +20,7 @@ OBJDIR := obj
 
 #_____________SOURCES_____________
 # files
-FILES := main.c init.c routine.c
+FILES := main.c init.c routine.c utils.c
 OBJECTS := $(patsubst %.c, %.o, $(FILES))
 # Source files
 SRC := $(addprefix $(SOURCE)/, $(SRC))
@@ -36,7 +36,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "$(BOLD)$(CYAN)Compiling...$(NC)"
-	$(CC) $(CFLAGS) $(PTRD) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(PTRD) $(OBJ) -o $(NAME) #-fsanitize=address
 	@echo "$(BOLD)$(GREEN)Compiled!$(NC)"
 
 $(OBJDIR)/%.o: $(SOURCE)/%.c
@@ -45,12 +45,14 @@ $(OBJDIR)/%.o: $(SOURCE)/%.c
 
 clean:
 	@echo "$(BOLD)$(CYAN)Cleaning...$(NC)"
-	@rm -f $(OBJ)
+	@rm -rf $(OBJDIR)
 	@echo "$(BOLD)$(GREEN)Cleaned!$(NC)"
 
 
 fclean: clean
 	@echo "$(BOLD)$(RED)Full Cleaning...$(NC)"
-	rm -f $(NAME)
+	@rm -f $(NAME)
 	@echo "$(BOLD)$(GREEN)Full Cleaned!$(NC)"
+
+re: fclean all
 
