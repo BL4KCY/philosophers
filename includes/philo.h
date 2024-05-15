@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:15 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/15 16:20:53 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/15 20:18:55 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,25 @@
 # include <sys/time.h>
 
 
+//_____________________Defines_____________________//
+
+//_COLORS_//
+
+# define RED		"\033[0;31m"
+# define GREEN		"\033[0;32m"
+# define YELLOW		"\033[0;33m"
+# define BLUE		"\033[0;34m"
+# define MAGENTA	"\033[0;35m"
+# define CYAN		"\033[0;36m"
+# define BOLD		"\033[1m"
+# define UNDERLINE	"\033[4m"
+# define BLINK		"\033[5m"
+# define REVERSE	"\033[7m"
+# define HIDDEN		"\033[8m"
+# define RESET		"\033[0m"
+
+//_____________________Structures_____________________//
+
 typedef struct s_data
 {
 	int				nb_philo;
@@ -32,7 +51,7 @@ typedef struct s_data
 	int				philo_must_eat;
 	bool			dead;
 	pthread_t		death_thread;
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	forks[200];
 	pthread_mutex_t	print;
 	pthread_mutex_t	death;
 	struct timeval	start;
@@ -60,5 +79,6 @@ void	*check_death(void *philo);
 void	get_fork(t_philo *p);
 void	drop_fork(t_philo *p);
 void	ft_usleep(long time);
+bool	check_args(t_data *data);
 
 #endif
