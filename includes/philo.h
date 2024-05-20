@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:15 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/17 23:45:26 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/20 18:49:46 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,6 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <sys/time.h>
-
-
-//_____________________Defines_____________________//
-
-//_COLORS_//
-
-# define RED		"\033[0;31m"
-# define GREEN		"\033[0;32m"
-# define YELLOW		"\033[0;33m"
-# define BLUE		"\033[0;34m"
-# define MAGENTA	"\033[0;35m"
-# define CYAN		"\033[0;36m"
-# define BOLD		"\033[1m"
-# define UNDERLINE	"\033[4m"
-# define BLINK		"\033[5m"
-# define REVERSE	"\033[7m"
-# define HIDDEN		"\033[8m"
-# define RESET		"\033[0m"
 
 //_____________________Structures_____________________//
 
@@ -80,5 +62,7 @@ int		get_fork(t_philo *p);
 int		drop_fork(t_philo *p);
 void	ft_usleep(long time);
 bool	check_args(t_data *data);
+ssize_t	ft_atoi(const char *str);
+int		start_philo(t_philo *philo, t_data *data);
 
 #endif
