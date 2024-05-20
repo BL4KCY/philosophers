@@ -6,41 +6,28 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:07:45 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/20 15:58:24 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/20 18:55:44 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
 long	get_time(t_data *data)
 {
-	struct timeval	time;
+	struct timeval	current;
+	int				data_time;
+	int				current_time;
 
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - (data->start.tv_sec * 1000) - (data->start.tv_usec / 1000));
-}
-
-int	print_msg(t_data *data, int id, char *msg)
-{
-	pthread_mutex_lock(&data->death);
-	pthread_mutex_lock(&data->print);
-	if (!data->dead || !strcmp(msg, "died"))
-		printf("%ld %d %s\n", get_time(data), id, msg);
-	if (!strcmp(msg, "died"))
-	{
-		pthread_mutex_unlock(&data->print);
-		pthread_mutex_unlock(&data->death);
-		return (1);
-	}
-	pthread_mutex_unlock(&data->print);
-	pthread_mutex_unlock(&data->death);
-	return (0);
+	gettimeofday(&current, NULL);
+	current_time = (current.tv_sec * 1000) + (current.tv_usec / 1000);
+	data_time = (data->start.tv_sec * 1000) + (data->start.tv_usec / 1000);
+	return (current_time - data_time);
 }
 
 void	*check_death(void *philo)
 {
 	t_philo	*p;
+	int		i;
 
 	p = (t_philo *)philo;
 	while (1)
@@ -48,7 +35,8 @@ void	*check_death(void *philo)
 		pthread_mutex_lock(&p->data->death);
 		if (get_time(p->data) - p->last_meal > p->data->time_to_die)
 		{
-			for (int i = 0; i < p->data->nb_philo; i++)
+			i = -1;
+			while (++i < p->data->nb_philo)
 				p->data->philo[i].data->dead = true;
 			pthread_mutex_unlock(&p->data->death);
 			print_msg(p->data, p->id, "died");
@@ -60,7 +48,7 @@ void	*check_death(void *philo)
 	return (NULL);
 }
 
-int		get_fork(t_philo *p)
+int	get_fork(t_philo *p)
 {
 	if (p->id % 2)
 		pthread_mutex_lock(p->right_fork);
@@ -97,16 +85,20 @@ int	drop_fork(t_philo *p)
 
 void	ft_usleep(long ms)
 {
-	struct timeval	time;
+	struct timeval	current;
 	struct timeval	start;
+	int				start_time;
+	int				current_time;
 	long			sleep_time;
 
 	sleep_time = 1;
 	gettimeofday(&start, NULL);
 	while (1)
 	{
-		gettimeofday(&time, NULL);
-		if (((time.tv_sec * 1000) + (time.tv_usec / 1000) - (start.tv_sec * 1000) - (start.tv_usec / 1000)) >= ms)
+		gettimeofday(&current, NULL);
+		start_time = (start.tv_sec * 1000) + (start.tv_usec / 1000);
+		current_time = (current.tv_sec * 1000) + (current.tv_usec / 1000);
+		if (current_time - start_time >= ms)
 			break ;
 		usleep(sleep_time);
 	}
