@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:55 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/20 18:55:59 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/20 23:14:10 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,15 @@ int	main(int ac, char **av)
 {
 	t_data	data;
 
+	data.philo = NULL;
+	data.forks = NULL;
 	if (ac != 5 && ac != 6 && av)
 		return (error_msg(), 1);
 	if (init_data(&data, ac, av))
 		return (1);
 	if (init_philo(&data))
 		return (1);
+	free(data.forks);
+	free(data.philo);
 	return (0);
 }
