@@ -2,7 +2,7 @@
 # Compiler
 CC := gcc
 # Flags
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -g -fsanitize=thread
 PTRD := -pthread
 
 #_____________COLORS_____________
@@ -36,7 +36,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "$(BOLD)$(CYAN)Compiling...$(NC)"
-	$(CC) $(CFLAGS) $(PTRD) $(OBJ) -o $(NAME) #-fsanitize=address
+	$(CC) $(CFLAGS) $(PTRD) $(OBJ) -o $(NAME)
 	@echo "$(BOLD)$(GREEN)Compiled!$(NC)"
 
 $(OBJDIR)/%.o: $(SOURCE)/%.c
