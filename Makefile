@@ -20,7 +20,7 @@ OBJDIR := obj
 
 #_____________SOURCES_____________
 # files
-FILES := main.c init.c routine.c utils.c
+FILES := main.c init.c routine.c utils.c ft_atoi.c
 OBJECTS := $(patsubst %.c, %.o, $(FILES))
 # Source files
 SRC := $(addprefix $(SOURCE)/, $(SRC))
