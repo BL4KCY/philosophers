@@ -6,17 +6,11 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:55 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/21 18:53:03 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 21:44:18 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	error_msg(void)
-{
-	printf("usage: ./philo <nb_philo> <time_to_die> %s",
-		"<time_to_eat> <time_to_sleep> [nb_must_eat]\n");
-}
 
 int	print_msg(t_data *data, int id, char *msg)
 {
@@ -53,7 +47,7 @@ int	main(int ac, char **av)
 	data.philo = NULL;
 	data.forks = NULL;
 	if (ac != 5 && ac != 6 && av)
-		return (error_msg(), 1);
+		return (1);
 	if (init_data(&data, ac, av))
 		return (1);
 	if (init_philo(&data))
