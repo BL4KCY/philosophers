@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:07:45 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/20 18:55:44 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 06:55:58 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	*check_death(void *philo)
 	return (NULL);
 }
 
-int	get_fork(t_philo *p)
+int	hold_fork(t_philo *p)
 {
 	if (p->id % 2)
 		pthread_mutex_lock(p->right_fork);
