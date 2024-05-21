@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 16:43:26 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/20 10:11:50 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 06:56:12 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*routine(void *philo)
 	while (i != p->data->nb_must_eat && !p->data->dead)
 	{
 		pthread_mutex_unlock(&p->data->death);
-		if (get_fork(p))
+		if (hold_fork(p))
 			return (NULL);
 		if (drop_fork(p))
 			return (NULL);
