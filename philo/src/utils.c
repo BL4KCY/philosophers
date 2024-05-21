@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:07:45 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/21 18:52:46 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 23:25:00 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	*check_death(void *philo)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&p->data->death);
-		ft_usleep(10);
 	}
 	return (NULL);
 }
