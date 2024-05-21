@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:07:45 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/21 06:55:58 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:52:46 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,13 @@ void	*check_death(void *philo)
 	int		i;
 
 	p = (t_philo *)philo;
-	while (1)
+	while (true)
 	{
 		pthread_mutex_lock(&p->data->death);
 		if (get_time(p->data) - p->last_meal > p->data->time_to_die)
 		{
+			if (check_finish(p))
+				return (NULL);
 			i = -1;
 			while (++i < p->data->nb_philo)
 				p->data->philo[i].data->dead = true;
@@ -44,6 +46,7 @@ void	*check_death(void *philo)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&p->data->death);
+		ft_usleep(10);
 	}
 	return (NULL);
 }
@@ -65,7 +68,7 @@ int	hold_fork(t_philo *p)
 	return (0);
 }
 
-int	drop_fork(t_philo *p)
+int	drop_fork(t_philo *p, int i)
 {
 	pthread_mutex_lock(&p->data->death);
 	p->last_meal = get_time(p->data);
@@ -75,6 +78,11 @@ int	drop_fork(t_philo *p)
 	ft_usleep(p->data->time_to_eat);
 	pthread_mutex_unlock(p->left_fork);
 	pthread_mutex_unlock(p->right_fork);
+	pthread_mutex_lock(&p->data->death);
+	if (i + 1 == p->data->nb_must_eat)
+		return (p->finish_meal = true,
+			pthread_mutex_unlock(&p->data->death), 1);
+	pthread_mutex_unlock(&p->data->death);
 	if (print_msg(p->data->philo->data, p->id, "is sleeping"))
 		return (1);
 	ft_usleep(p->data->time_to_sleep);
