@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 16:33:05 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/20 18:44:44 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 08:48:10 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	init_philo(t_data *data)
 	{
 		philo[i].id = i + 1;
 		philo[i].data = data;
+		philo[i].finish_meal = false;
 		philo[i].left_fork = &data->forks[i];
 		philo[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
 	}
