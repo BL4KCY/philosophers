@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:55 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/20 23:14:10 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:53:03 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,17 @@ int	print_msg(t_data *data, int id, char *msg)
 	}
 	pthread_mutex_unlock(&data->print);
 	pthread_mutex_unlock(&data->death);
+	return (0);
+}
+
+int	check_finish(t_philo *p)
+{
+	int	i;
+
+	i = 0;
+	while (i < p->data->nb_philo)
+		if (p->data->philo[i++].finish_meal)
+			return (pthread_mutex_unlock(&p->data->death), 1);
 	return (0);
 }
 
