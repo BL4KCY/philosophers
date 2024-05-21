@@ -2,7 +2,7 @@
 # Compiler
 CC := gcc
 # Flags
-CFLAGS := -Wall -Wextra -Werror -g -fsanitize=thread
+CFLAGS := -Wall -Wextra -Werror
 PTRD := -pthread
 
 #_____________COLORS_____________
