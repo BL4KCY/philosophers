@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:15 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/21 06:38:15 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:53:19 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo
 	int				id;
 	pthread_t		thread;
 	long			last_meal;
+	bool			finish_meal;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	struct s_data	*data;
@@ -59,10 +60,11 @@ long	get_time(t_data *data);
 int		print_msg(t_data *data, int id, char *msg);
 void	*check_death(void *philo);
 int		hold_fork(t_philo *p);
-int		drop_fork(t_philo *p);
+int		drop_fork(t_philo *p, int i);
 void	ft_usleep(long time);
 bool	check_args(t_data *data);
 ssize_t	ft_atoi(const char *str);
 int		start_philo(t_philo *philo, t_data *data);
+int		check_finish(t_philo *p);
 
 #endif
