@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:15 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/20 18:49:46 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/21 06:38:15 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	*routine(void *philo);
 long	get_time(t_data *data);
 int		print_msg(t_data *data, int id, char *msg);
 void	*check_death(void *philo);
-int		get_fork(t_philo *p);
+int		hold_fork(t_philo *p);
 int		drop_fork(t_philo *p);
 void	ft_usleep(long time);
 bool	check_args(t_data *data);
