@@ -1,14 +1,12 @@
 #_____________COMPILATION_____________
-# Compiler
-CC := gcc
 # Flags
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror #-g -fsanitize=address
 PTRD := -pthread
 
 #_____________COLORS_____________
 RED = \033[0;31m
 CYAN = \033[0;36m
-ORANGE = \033[0;33m
+YELLOW = \033[0;33m
 GREEN = \033[0;32m
 NC = \033[0m
 BOLD = \033[1m
@@ -35,13 +33,16 @@ NAME = philo
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo "$(BOLD)$(CYAN)Compiling...$(NC)"
-	$(CC) $(CFLAGS) $(PTRD) $(OBJ) -o $(NAME)
-	@echo "$(BOLD)$(GREEN)Compiled!$(NC)"
+	@echo "$(BOLD)$(CYAN)Compiling $^ ...🕒$(NC)"
+	@$(CC) $(CFLAGS) $(PTRD) $(OBJ) -o $(NAME)
+	@echo "$(BOLD)$(GREEN)$^ Compiled!$(NC)"
+	@echo "$(BOLD)$(GREEN)$(NAME) philo is ready! ✅$(NC)"
 
 $(OBJDIR)/%.o: $(SOURCE)/%.c
 	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@echo "$(BOLD)$(YELLOW)Compiling $< ...🕒$(NC)"
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@echo "$(BOLD)$(GREEN)$< Compiled!$(NC)"
 
 clean:
 	@echo "$(BOLD)$(CYAN)Cleaning...$(NC)"
