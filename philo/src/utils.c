@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:07:45 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/21 23:25:00 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/23 18:47:56 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,28 @@ long	get_time(t_data *data)
 	return (current_time - data_time);
 }
 
-void	*check_death(void *philo)
+void	*check_death(void *data)
 {
-	t_philo	*p;
+	t_data	*d;
 	int		i;
 
-	p = (t_philo *)philo;
-	while (true)
+	d = (t_data *)data;
+	while (1)
 	{
-		pthread_mutex_lock(&p->data->death);
-		if (get_time(p->data) - p->last_meal > p->data->time_to_die)
+		i = -1;
+		while (++i < d->nb_philo)
 		{
-			if (check_finish(p))
-				return (NULL);
-			i = -1;
-			while (++i < p->data->nb_philo)
-				p->data->philo[i].data->dead = true;
-			pthread_mutex_unlock(&p->data->death);
-			print_msg(p->data, p->id, "died");
-			ft_usleep(100);
-			return (NULL);
+			if (get_time(d) - d->philo[i].last_meal > d->time_to_die)
+			{
+				d->dead = true;
+				print_msg(d, i + 1, "died");
+				return (t_mutex_tryunlock(&d->forks[0]), NULL);
+			}
+			if (d->philo[i].finish_meal)
+				if (check_finish(&d->philo[i]))
+					return (t_mutex_tryunlock(&d->forks[0]), NULL);
 		}
-		pthread_mutex_unlock(&p->data->death);
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -53,15 +53,15 @@ void	*check_death(void *philo)
 int	hold_fork(t_philo *p)
 {
 	if (p->id % 2)
-		pthread_mutex_lock(p->right_fork);
+		t_mutex_lock(p->right_fork);
 	else
-		pthread_mutex_lock(p->left_fork);
+		t_mutex_lock(p->left_fork);
 	if (print_msg(p->data->philo->data, p->id, "has taken a fork"))
 		return (1);
 	if (p->id % 2)
-		pthread_mutex_lock(p->left_fork);
+		t_mutex_lock(p->left_fork);
 	else
-		pthread_mutex_lock(p->right_fork);
+		t_mutex_lock(p->right_fork);
 	if (print_msg(p->data->philo->data, p->id, "has taken a fork"))
 		return (1);
 	return (0);
@@ -69,19 +69,14 @@ int	hold_fork(t_philo *p)
 
 int	drop_fork(t_philo *p, int i)
 {
-	pthread_mutex_lock(&p->data->death);
 	p->last_meal = get_time(p->data);
-	pthread_mutex_unlock(&p->data->death);
 	if (print_msg(p->data->philo->data, p->id, "is eating"))
 		return (1);
 	ft_usleep(p->data->time_to_eat);
-	pthread_mutex_unlock(p->left_fork);
-	pthread_mutex_unlock(p->right_fork);
-	pthread_mutex_lock(&p->data->death);
+	t_mutex_unlock(p->left_fork);
+	t_mutex_unlock(p->right_fork);
 	if (i + 1 == p->data->nb_must_eat)
-		return (p->finish_meal = true,
-			pthread_mutex_unlock(&p->data->death), 1);
-	pthread_mutex_unlock(&p->data->death);
+		return (p->finish_meal = true, 1);
 	if (print_msg(p->data->philo->data, p->id, "is sleeping"))
 		return (1);
 	ft_usleep(p->data->time_to_sleep);
