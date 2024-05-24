@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:15 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/21 21:41:43 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/23 18:40:00 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 
 //_____________________Structures_____________________//
 
+typedef struct s_mutex
+{
+	pthread_mutex_t	mutex;
+	_Atomic bool	locked;
+}				t_mutex;
+
 typedef struct s_data
 {
 	int				nb_philo;
@@ -31,11 +37,11 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				nb_must_eat;
 	int				philo_must_eat;
-	bool			dead;
+	_Atomic bool	dead;
 	pthread_t		death_thread;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	print;
-	pthread_mutex_t	death;
+	t_mutex			*forks;
+	t_mutex			print;
+	t_mutex			death;
 	struct timeval	start;
 	struct s_philo	*philo;
 }				t_data;
@@ -44,10 +50,10 @@ typedef struct s_philo
 {
 	int				id;
 	pthread_t		thread;
-	long			last_meal;
-	bool			finish_meal;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	_Atomic long	last_meal;
+	_Atomic bool	finish_meal;
+	t_mutex			*left_fork;
+	t_mutex			*right_fork;
 	struct s_data	*data;
 }				t_philo;
 
@@ -58,7 +64,7 @@ int		init_philo(t_data *data);
 void	*routine(void *philo);
 long	get_time(t_data *data);
 int		print_msg(t_data *data, int id, char *msg);
-void	*check_death(void *philo);
+void	*check_death(void *data);
 int		hold_fork(t_philo *p);
 int		drop_fork(t_philo *p, int i);
 void	ft_usleep(long time);
@@ -67,4 +73,10 @@ ssize_t	ft_atoi(const char *str);
 int		start_philo(t_philo *philo, t_data *data);
 int		check_finish(t_philo *p);
 bool	is_number(char *str);
+
+int		t_mutex_init(t_mutex *mutex);
+int		t_mutex_lock(t_mutex *mutex);
+int		t_mutex_unlock(t_mutex *mutex);
+int		t_mutex_trylock(t_mutex *mutex);
+int		t_mutex_tryunlock(t_mutex *mutex);
 #endif
