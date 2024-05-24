@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:07:45 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/23 18:47:56 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:48:38 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,12 @@ void	*check_death(void *data)
 		{
 			if (get_time(d) - d->philo[i].last_meal > d->time_to_die)
 			{
+				if (d->philo[i].finish_meal)
+					return (NULL);
 				d->dead = true;
 				print_msg(d, i + 1, "died");
 				return (t_mutex_tryunlock(&d->forks[0]), NULL);
 			}
-			if (d->philo[i].finish_meal)
-				if (check_finish(&d->philo[i]))
-					return (t_mutex_tryunlock(&d->forks[0]), NULL);
 		}
 		usleep(1000);
 	}
