@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 15:19:55 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/21 21:44:18 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/23 16:07:53 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 int	print_msg(t_data *data, int id, char *msg)
 {
-	pthread_mutex_lock(&data->death);
-	pthread_mutex_lock(&data->print);
+	t_mutex_lock(&data->print);
+	t_mutex_lock(&data->death);
 	if (!data->dead || !strcmp(msg, "died"))
 		printf("%ld %d %s\n", get_time(data), id, msg);
 	if (!strcmp(msg, "died"))
 	{
-		pthread_mutex_unlock(&data->print);
-		pthread_mutex_unlock(&data->death);
+		t_mutex_unlock(&data->print);
+		t_mutex_unlock(&data->death);
 		return (1);
 	}
-	pthread_mutex_unlock(&data->print);
-	pthread_mutex_unlock(&data->death);
+	t_mutex_unlock(&data->print);
+	t_mutex_unlock(&data->death);
 	return (0);
 }
 
@@ -35,9 +35,9 @@ int	check_finish(t_philo *p)
 
 	i = 0;
 	while (i < p->data->nb_philo)
-		if (p->data->philo[i++].finish_meal)
-			return (pthread_mutex_unlock(&p->data->death), 1);
-	return (0);
+		if (!(p->data->philo[i++].finish_meal))
+			return (0);
+	return (2);
 }
 
 int	main(int ac, char **av)
