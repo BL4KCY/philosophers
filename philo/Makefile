@@ -55,5 +55,8 @@ fclean: clean
 	@rm -f $(NAME)
 	@echo "$(BOLD)$(GREEN)Full Cleaned!$(NC)"
 
+bonus:
+	@echo "$(BOLD)$(RED)No bonus available!$(NC)"
+
 re: fclean all
 
