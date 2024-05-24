@@ -6,7 +6,7 @@
 /*   By: melfersi <melfersi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 16:33:05 by melfersi          #+#    #+#             */
-/*   Updated: 2024/05/21 08:48:10 by melfersi         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:58:51 by melfersi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int	init_data(t_data *data, int ac, char **av)
 	data->philo_must_eat = 0;
 	if (!check_args(data))
 		return (1);
-	pthread_mutex_init(&data->print, NULL);
-	pthread_mutex_init(&data->death, NULL);
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
+	t_mutex_init(&data->print);
+	t_mutex_init(&data->death);
+	data->forks = malloc(sizeof(t_data) * data->nb_philo);
 	i = -1;
 	while (++i < data->nb_philo)
-		pthread_mutex_init(&data->forks[i], NULL);
+		t_mutex_init(&data->forks[i]);
 	return (gettimeofday(&data->start, NULL), 0);
 }
 
@@ -49,6 +49,7 @@ int	init_philo(t_data *data)
 		philo[i].id = i + 1;
 		philo[i].data = data;
 		philo[i].finish_meal = false;
+		philo[i].last_meal = get_time(data);
 		philo[i].left_fork = &data->forks[i];
 		philo[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
 	}
@@ -78,7 +79,7 @@ int	start_philo(t_philo *philo, t_data *data)
 	while (++i < data->nb_philo)
 		if (pthread_create(&philo[i].thread, NULL, &routine, &philo[i]))
 			return (write(2, "Error: pthread_create failed\n", 30), 1);
-	if (pthread_create(&data->death_thread, NULL, check_death, philo))
+	if (pthread_create(&data->death_thread, NULL, check_death, philo->data))
 		return (write(2, "Error: pthread_create failed\n", 30), 1);
 	if (pthread_join(data->death_thread, NULL))
 		return (write(2, "Error: pthread_join failed\n", 27), 1);
