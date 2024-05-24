@@ -1,6 +1,6 @@
 #_____________COMPILATION_____________
 # Flags
-CFLAGS := -Wall -Wextra -Werror #-g -fsanitize=address
+CFLAGS := -Wall -Wextra -Werror #-g -fsanitize=thread
 PTRD := -pthread
 
 #_____________COLORS_____________
@@ -18,7 +18,7 @@ OBJDIR := obj
 
 #_____________SOURCES_____________
 # files
-FILES := main.c init.c routine.c utils.c ft_atoi.c
+FILES := main.c init.c routine.c utils.c ft_atoi.c mutex.c
 OBJECTS := $(patsubst %.c, %.o, $(FILES))
 # Source files
 SRC := $(addprefix $(SOURCE)/, $(SRC))
